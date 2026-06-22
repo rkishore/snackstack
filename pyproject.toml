@@ -1,0 +1,10 @@
+[project]
+name = "snackstack"
+version = "0.1.0"
+description = "Agentic AI snack-ordering assistant"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = []
