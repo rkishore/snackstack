@@ -1,0 +1,101 @@
+"""
+Static data for the menu
+
+In production, these would come from a persistent store like a database. Keeping it simple 
+here to focus first on the core functionality.
+
+Each dish has: id, name, category, cuisine, price (INR), rating, dietary_tags, description, 
+and availability. Defined as a Python list of dictionaries.
+
+"""
+
+menu_items: list[dict] = [
+    {
+        "id": "MENU001",
+        "name": "Margherita Pizza",
+        "category": "Pizza",
+        "cuisine": "Italian",
+        "price": 299,
+        "rating": 4.7,
+        "dietary_tags": ["Veg"],
+        "description": "Classic thin crust with tomato, mozzarella, basil",
+        "availability": True
+    },
+    {
+        "id": "MENU002",
+        "name": "Vegan Pasta Primevera",
+        "category": "Entree",
+        "cuisine": "Italian",
+        "price": 349,
+        "rating": 4.5,
+        "dietary_tags": ["Vegan"],
+        "description": "Penne with seasonal vegetables, olive oil, garlic",
+        "availability": True,
+    },
+    {
+        "id": "MENU003",
+        "name": "Butter Chicken",
+        "category": "Entree",
+        "cuisine": "Indian",
+        "price": 379,
+        "rating": 4.9,
+        "dietary_tags": ["GF"],
+        "description": "Creamy tomato curry with tender chicken and naan",
+        "availability": True,
+    },
+    {
+        "id": "MENU004",
+        "name": "Vegan Buddha Bowl",
+        "category": "Entree",
+        "cuisine": "Fusion",
+        "price": 319,
+        "rating": 4.6,
+        "dietary_tags": ["Vegan", "GF"],
+        "description": "Quinoa, chickpeas, avocado, greens, tahini",
+        "availability": True,
+    },
+    {
+        "id": "MENU005",
+        "name": "Classic Cheeseburger",
+        "category": "Entree",
+        "cuisine": "American",
+        "price": 259,
+        "rating": 4.4,
+        "dietary_tags": [],
+        "description": "Beef patty, cheddar, lettuce, tomato, brioche bun",
+        "availability": True,
+    },
+    {
+        "id": "MENU006",
+        "name": "Paneer Tikka",
+        "category": "Appetizer",
+        "cuisine": "Indian",
+        "price": 199,
+        "rating": 4.8,
+        "dietary_tags": ["Veg", "GF"],
+        "description": "Tandoor-grilled cottage cheese with peppers",
+        "availability": True,
+    },
+    {
+        "id": "MENU007",
+        "name": "Aglio e Olio",
+        "category": "Entree",
+        "cuisine": "Italian",
+        "price": 279,
+        "rating": 4.5,
+        "dietary_tags": ["Vegan"],
+        "description": "Spaghetti with garlic, chilli, olive oil, parsley",
+        "availability": True,
+    },
+    {
+        "id": "MENU008",
+        "name": "Mango Lassi",
+        "category": "Beverage",
+        "cuisine": "Indian",
+        "price": 99,
+        "rating": 4.7,
+        "dietary_tags": ["Veg", "GF"],
+        "description": "Blended yogurt with Alphonso mango, cardamom",
+        "availability": True,
+    }
+]
