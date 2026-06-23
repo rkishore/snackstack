@@ -9,7 +9,7 @@ and availability. Defined as a Python list of dictionaries.
 
 """
 
-menu_items: list[dict] = [
+MENU_ITEMS: list[dict] = [
     {
         "id": "MENU001",
         "name": "Margherita Pizza",

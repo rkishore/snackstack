@@ -10,7 +10,7 @@ dictionary keyed by order_id.
 
 """
 
-orders: dict[str, dict] = {
+ORDERS: dict[str, dict] = {
     "ORD-201": {
         "order_id": "ORD-201",
         "item_id": "MENU003",
