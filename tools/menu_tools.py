@@ -11,7 +11,6 @@ from langchain_core.tools import tool
 
 from snackstack.logger import get_logger
 from tools.rag import menu_vectorstore
-from data.orders import ORDERS
 
 logger = get_logger("menu_tools")
 

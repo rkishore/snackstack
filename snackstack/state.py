@@ -13,9 +13,8 @@ import operator
 from typing import Annotated, List, Literal, TypedDict
 
 from langchain_core.messages import AnyMessage
-#from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field
 
-'''
 def agent_results_reducer(current: list[dict], update: list[dict]) -> list[dict]:
     """Like operator.add but empty update signals reset."""
     if not update:
@@ -43,7 +42,6 @@ class ClassificationResult(BaseModel):
     reasoning: str = Field(
         description="Brief explanation of the routing result."
     )
-'''
 
 class SnackStackState(TypedDict):
     """The main graph state shared by all nodes."""
@@ -53,7 +51,8 @@ class SnackStackState(TypedDict):
     user_query: str
 
     # Routing
-    route: Literal["menu_agent", "order_agent"]
+    tasks: List[AgentTask]
+    reasoning: str
     requires_synthesis: bool
 
     # --- Specialist agent outputs ----
