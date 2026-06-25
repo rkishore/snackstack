@@ -55,10 +55,6 @@ class SnackStackState(TypedDict):
     reasoning: str
     requires_synthesis: bool
 
-    # --- Specialist agent outputs ----
-    menu_response: str
-    order_response: str
-
     # Collected results
     agent_results: Annotated[list[dict], agent_results_reducer]
 

@@ -17,7 +17,7 @@ logger = get_logger(__name__)
 # ═══════════════════════════════════════════════════════════
 #  NODE 1 — Orchestrator
 # ═══════════════════════════════════════════════════════════
-def orchestrator_node(state: SnackStackState) -> Command[Literal["menu_agent", "order_agent", "synthesizer"]]:
+def orchestrator_node(state: SnackStackState) -> Command[Literal["menu_agent", "order_agent", "synthesizer_node"]]:
     """
     Analyse the customer query and determine which agent(s) should handle it.
     """
@@ -45,7 +45,7 @@ def orchestrator_node(state: SnackStackState) -> Command[Literal["menu_agent", "
                 classification.requires_synthesis)
     
     return Command(
-        goto=[t.agent for t in classification.tasks] or ["synthesizer"],
+        goto=[t.agent for t in classification.tasks] or ["synthesizer_node"],
         update={
             "tasks": classification.tasks,
             "reasoning": classification.reasoning,

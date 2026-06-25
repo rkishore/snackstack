@@ -24,7 +24,7 @@ menu_llm = llm.bind_tools(menu_tools)
 
 MAX_TOOL_ITERATIONS = 5
 
-def menu_agent(state: SnackStackState) -> Command[Literal["synthesizer"]]:
+def menu_agent(state: SnackStackState) -> Command[Literal["synthesizer_node"]]:
     """
     Handle menu-related operations and return a command to the synthesizer.
     """
@@ -56,5 +56,5 @@ def menu_agent(state: SnackStackState) -> Command[Literal["synthesizer"]]:
         
     return Command(
         update={"agent_results": [{"source": "menu_agent", "response": answer}]},
-        goto="synthesizer"
+        goto="synthesizer_node"
     )

@@ -27,7 +27,7 @@ order_llm = llm.bind_tools(order_tools)
 
 MAX_TOOL_ITERATIONS = 5
 
-def order_agent(state: SnackStackState) -> Command[Literal["synthesizer"]]:
+def order_agent(state: SnackStackState) -> Command[Literal["synthesizer_node"]]:
     """
     Handle order-related operations and return a command to the synthesizer.
     """
@@ -59,5 +59,5 @@ def order_agent(state: SnackStackState) -> Command[Literal["synthesizer"]]:
         
     return Command(
         update={"agent_results": [{"source": "order_agent", "response": answer}]},
-        goto="synthesizer"
+        goto="synthesizer_node"
     )
