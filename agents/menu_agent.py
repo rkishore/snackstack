@@ -13,6 +13,7 @@ from snackstack.config import llm
 from tools.menu_tools import search_menu_catalog
 
 from agents.prompts import MENU_AGENT_SYS_PROMPT
+from agents.utils import build_context, get_task_description
 
 logger = get_logger(__name__)
 
@@ -23,35 +24,12 @@ menu_llm = llm.bind_tools(menu_tools)
 
 MAX_TOOL_ITERATIONS = 5
 
-def build_context(messages: list[AnyMessage]) -> str:
-    """Format prior conversation turns as text for agent context"""
-    if not messages:
-        return ""
-    
-    parts = []
-    for msg in messages:
-        if isinstance(msg, HumanMessage):
-            parts.append(f"Customer: {msg.content}")
-        elif isinstance(msg, AIMessage):
-            parts.append(f"Assistant: {msg.content}")
-    
-    if not parts:
-        return ""
-
-    return "CONVERSATION SO FAR:\n" + "\n".join(parts) + "\n\n"
-
-def _menu_task_description(state: SnackStackState) -> str:
-    for task in state.get("tasks", []):
-        if task.agent == "menu_agent":
-            return task.task_description
-    return ""
-
 def menu_agent(state: SnackStackState) -> Command[Literal["synthesizer"]]:
     """
     Handle menu-related operations and return a command to the synthesizer.
     """
     user_query = state.get("user_query", "")
-    task_desc = _menu_task_description(state)
+    task_desc = get_task_description(state, "menu_agent")
     logger.info(f"User query: {user_query}")
     logger.info(f"menu_agent  query:{user_query!r}, task: {task_desc!r}")
 
