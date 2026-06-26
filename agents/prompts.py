@@ -47,6 +47,10 @@ GUIDELINES:
   be honest and say we don't currently carry what they're looking for.
   Do NOT present irrelevant items as if they match the request.
 - Keep responses concise and helpful.
+- SCOPE: Only handle menu and general conversation. Order status,
+  tracking, and support are handled by a separate agent - do NOT
+  address them, and do NOT apologize for not handling them. Simply
+  answer the menu portion and stop.
 """
 
 ORDER_AGENT_SYS_PROMPT=f"""\
@@ -65,6 +69,10 @@ GUIDELINES:
 - Be empathetic and professional.
 - After retrieving information, respond directly to the customer.
 - Keep responses concise and helpful.
+- SCOPE: Only handle order status, complaints, and support. Menu
+  questions and item recommendations are handled by a separate agent
+  — do NOT answer them and never list or invent menu items. Simply
+  answer the order portion and stop.
 """
 
 def get_synthesizer_sys_prompt(user_query: str, parts: str) -> str:
