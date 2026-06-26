@@ -4,10 +4,12 @@ Order agent for handling order-related operations.
 
 from __future__ import annotations
 
+import re
+
 from typing import Literal
 
 from langchain_core.messages import AIMessage, AnyMessage, HumanMessage, SystemMessage, ToolMessage
-from langgraph.types import Command
+from langgraph.types import Command, interrupt
 
 from snackstack.logger import get_logger
 from snackstack.state import SnackStackState 
@@ -19,6 +21,11 @@ from agents.utils import build_context, get_task_description
 from agents.prompts import ORDER_AGENT_SYS_PROMPT
 
 logger = get_logger(__name__)
+
+# ID regex
+_ID_REGEX = re.compile(r"(ORD[-\s]?\d+|@)", re.IGNORECASE)
+def has_order_id(query: str) -> bool:
+    return bool(_ID_REGEX.search(query))
 
 # ── Tool bindings ────────────────────────────────────────────
 order_tools = [get_order_status]
@@ -35,6 +42,11 @@ def order_agent(state: SnackStackState) -> Command[Literal["synthesizer_node"]]:
     task_desc = get_task_description(state, "order_agent")
     logger.info(f"User query: {user_query}")
     logger.info(f"order_agent  query:{user_query!r}, task: {task_desc!r}")
+
+    if not has_order_id(user_query):
+        provided = interrupt("Please share your order ID (e.g. ORD-201) or your registered email address.")
+        user_query = f"{user_query} {provided}".strip()
+        logger.info(f"User query past interrupt: {user_query}")
 
     context = build_context(state.get("messages", []))
 

@@ -3,6 +3,7 @@
 import argparse
 import uuid
 
+from langgraph.types import Command
 from langchain_core.messages import HumanMessage
 from snackstack.graph import snackstack_graph
 from snackstack.logger import get_logger
@@ -23,7 +24,14 @@ class SnackStackAssistant:
             {"user_query": query, "messages": [HumanMessage(content=query)]},
             config=self._config
         )
-        # TODO: Interrupts code goes here.
+        
+        while True:
+            intrs = self.graph.get_state(self._config).interrupts
+            if not intrs:
+                break
+            answer = input(f"Snackstack: {intrs[0].value}\nYou: ").strip()
+            result = self.graph.invoke(Command(resume=answer), config=self._config)
+        
         return result.get("final_answer", "No answer available")
 
     def reset(self) -> None:
@@ -39,7 +47,7 @@ def run_text_loop(assistant: SnackStackAssistant):
             continue
         if user_input.lower() == "reset":
             assistant.reset()
-            print("Snakcstack: conversation reset.")
+            print("Snackstack: conversation reset.")
             continue
 
         logger.info(f"User input: {user_input}")
