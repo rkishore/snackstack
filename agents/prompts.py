@@ -6,11 +6,14 @@ System prompts for
 - Synthesizer
 """
 
-def get_orchestrator_sys_prompt(user_query: str) -> str:
+def get_orchestrator_sys_prompt(user_query: str, context: str) -> str:
     ORCHESTRATOR_SYS_PROMPT = f"""\
     Analyse this customer query and decide which agent(s) should handle it.
 
-    QUERY: {user_query}
+    CONVERSATION HISTORY: 
+    {context}
+
+    CURRENT QUERY: {user_query}
 
     AGENTS:
         menu_agent  – menu searches, recommendations, catalog questions, AND general 
@@ -23,9 +26,11 @@ def get_orchestrator_sys_prompt(user_query: str) -> str:
             2. Menu-only queries  → menu_agent only
             3. Order/support queries → order_agent only
             4. Mixed queries         → BOTH agents, requires_synthesis = true
+            5. Use the history to interpret follow-ups. A bare order ID or email address following
+            an order question → order_agent only
             IMPORTANT: Only route to order_agent when the query clearly involves
-            an order, complaint, or support issue. When in doubt, use menu_agent.
-    """
+            an order, complaint, or support issue. t.When in doubt, use menu_agen
+            """
     return ORCHESTRATOR_SYS_PROMPT
 
 MENU_AGENT_SYS_PROMPT=f"""\

@@ -38,7 +38,7 @@ class SnackStackAssistant:
         self.thread_id = f"cli-session-{uuid.uuid4().hex[:8]}"
 
 def run_text_loop(assistant: SnackStackAssistant):
-    print("Snackstack - ask about the menu or your order. ('reset' to clear, 'quit' to exit.")
+    print("Snackstack - ask about the menu or your order. ('reset' to clear, 'quit' to exit).")
     while True:
         user_input = input("\nYou: ").strip()
         if user_input.lower() in {"quit", "exit", "bye"}:

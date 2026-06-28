@@ -11,6 +11,7 @@ from snackstack.logger import get_logger
 from snackstack.state import SnackStackState, ClassificationResult
 from snackstack.config import llm
 from agents.prompts import get_orchestrator_sys_prompt 
+from agents.utils import build_context
 
 logger = get_logger(__name__)
 
@@ -26,8 +27,9 @@ def orchestrator_node(state: SnackStackState) -> Command[Literal["menu_agent", "
         user_query = state["messages"][-1].content
 
     logger.info("Orchestrator  query=%r", user_query)
-
-    prompt = get_orchestrator_sys_prompt(user_query)
+    
+    context = build_context(state.get("messages", []))
+    prompt = get_orchestrator_sys_prompt(user_query, context)
 
     classifier = llm.with_structured_output(ClassificationResult)
 
