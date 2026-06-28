@@ -7,6 +7,8 @@ from langgraph.types import Command
 from langchain_core.messages import HumanMessage
 from snackstack.graph import snackstack_graph
 from snackstack.logger import get_logger
+from voice.recorder import VoiceRecorder
+from voice.speaker import VoiceSpeaker
 
 logger = get_logger(__name__)
 
@@ -37,7 +39,13 @@ class SnackStackAssistant:
     def reset(self) -> None:
         self.thread_id = f"cli-session-{uuid.uuid4().hex[:8]}"
 
-def run_text_loop(assistant: SnackStackAssistant):
+def _handle_input(assistant: SnackStackAssistant, user_input: str, speaker: VoiceSpeaker = None):
+    result = assistant.ask(user_input)
+    print(f"Snackstack: {result}")
+    if speaker:
+        speaker.speak(result)   
+
+def run_text_loop(assistant: SnackStackAssistant, speaker: VoiceSpeaker = None):
     print("Snackstack - ask about the menu or your order. ('reset' to clear, 'quit' to exit).")
     while True:
         user_input = input("\nYou: ").strip()
@@ -51,8 +59,25 @@ def run_text_loop(assistant: SnackStackAssistant):
             continue
 
         logger.info(f"User input: {user_input}")
-        result = assistant.ask(user_input)
-        print(f"Snackstack: {result}")
+        _handle_input(assistant, user_input, speaker)
+
+def run_voice_loop(assistant: SnackStackAssistant, recorder: VoiceRecorder, speaker: VoiceSpeaker = None):
+    print("Snackstack - ask about the menu or your order. ('reset' to clear, 'quit' to exit).")
+    while True:
+        cmd = input("\n[Enter] to speak: ").strip().lower()
+        if cmd in {"quit", "exit", "bye"}:
+            break
+        if cmd == "reset":
+            assistant.reset()
+            print("Snackstack: conversation reset.")
+            continue
+        _, user_input = recorder.record_and_transcribe()
+        print(f"You said: {user_input}")
+        if not user_input.strip():
+            print("Snackstack: heard nothing - try again.")
+            continue
+
+        _handle_input(assistant, user_input, speaker)
 
 def main() -> int:
     """Run the snackstack application.
@@ -62,10 +87,18 @@ def main() -> int:
     """
     parser = argparse.ArgumentParser(description="Snackstack - ask about the menu or your order.")
     parser.add_argument("--thread-id", default="cli-session-1", help="The thread ID for the conversation.")
+    parser.add_argument("--voice", action="store_true", help="record spoken input (microphone + Whisper).")
+    parser.add_argument("--voice-out", action="store_true", help="speak responses (OpenAI TTS).")
     args = parser.parse_args()
 
+    recorder = VoiceRecorder() if args.voice else None
+    speaker = VoiceSpeaker() if args.voice_out else None
     assistant = SnackStackAssistant(thread_id=args.thread_id)
-    run_text_loop(assistant)
+    
+    if args.voice:
+        run_voice_loop(assistant, recorder, speaker)
+    else:
+        run_text_loop(assistant, speaker)
 
     return 0
 
